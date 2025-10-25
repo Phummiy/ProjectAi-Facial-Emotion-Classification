@@ -1,0 +1,115 @@
+body {
+  font-family: 'Prompt', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #b7d3f2, #f0f4f8);
+  color: #333;
+}
+
+/* หัวข้อ */
+h1 {
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+/* กล้อง */
+video {
+  width: 700px;
+  height: 520px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  border: 2px solid #333;
+  background-color: #000;
+  display: none; /* ซ่อนตอนแรก */
+}
+
+/* ปุ่มย้อนกลับ */
+.icons {
+  margin-top: 30px;
+}
+
+.icon-img {
+  width: 70px;
+  height: 70px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.icon-img:hover {
+  transform: scale(1.2);
+}
+
+/* Loader */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3a7bd5;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+canvas {
+  display: none;
+}
+  #startBtn {
+    display: inline-block;
+    padding: 15px 25px;
+    font-size: 24px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    background-color: rgba(85, 129, 166, 1);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 9px #999;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  #startBtn:hover {
+    background-color: #75a4e5;
+  }
+
+  /* เมื่อถูกกด (active state) */
+  #startBtn:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+  }
+
+  .back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #ffffffcc;
+  border: none;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.back-btn:hover {
+      background-color: #f1f1f1;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .back-btn img {
+      width: 40px;
+      height: 40px;
+    }
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}

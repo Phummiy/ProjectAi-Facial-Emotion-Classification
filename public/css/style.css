@@ -1,0 +1,98 @@
+html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #a8c8e0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #000;
+    text-align: center;
+  }
+
+  .title-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+
+  .title {
+    font-size: clamp(32px, 8vw, 60px);
+    /* responsive font: min 32px, max 60px */
+    font-weight: bold;
+    color: black;
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .title::after {
+    content: "welcome";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateX(100%);
+    animation: slideMask 2s infinite;
+    font-weight: bold;
+    font-size: clamp(32px, 8vw, 60px);
+  }
+
+  @keyframes slideMask {
+    0% { transform: translateX(100%); }
+    50% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  .subtitle {
+    font-size: clamp(18px, 3vw, 30px);
+    margin-top: 0.8em;
+  }
+
+  .icons {
+    margin-top: 3vh;
+    display: flex;
+    gap: clamp(20px, 6vw, 50px);
+    justify-content: center;
+    align-items: center;
+  }
+
+  .icon-img {
+    width: clamp(40px, 10vw, 60px);
+    height: clamp(40px, 10vw, 60px);
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .icon-img:hover {
+    transform: scale(1.2);
+  }
+
+  .bottom-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(85, 129, 166, 1);
+    text-align: center;
+    padding: 0.8em 0;
+    font-size: clamp(12px, 2vw, 16px);
+    color: #fff;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ปรับเพิ่มเติมสำหรับจอเล็กมาก */
+  @media (max-width: 480px) {
+    .icons {
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+  }

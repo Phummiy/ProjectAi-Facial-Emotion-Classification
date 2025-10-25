@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Gallery</title>
+  <link rel="stylesheet" href="css/gallery.css">
+</head>
+<body>
+
+  <a href="index.html" class="back-btn">
+    <img src="/assets/backarrow.png" alt="Back">
+  </a>
+
+  <!-- ครอบหัวข้อด้วยลิงก์ -->
+  <a href="index.html" class="gallery-link">
+    <h1>Gallery</h1>
+  </a>
+
+  <!-- ปุ่มอัปโหลดรูปทีละรูป -->
+  <div class="upload-wrapper">
+    <input type="file" id="imageInput" accept="image/*">
+  </div>
+
+  <!-- แสดง gallery -->
+  <div class="gallery-wrapper" id="gallery"></div>
+
+  
+  <div id="result" class="result-box"></div>
+<div id="loading" class="loading" style="display:none;">⏳ กำลังทำนายอารมณ์...</div>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const gallery = document.getElementById('gallery');
+    const loading = document.getElementById('loading');
+    const resultBox = document.getElementById('result');
+
+    imageInput.addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // แสดงภาพ preview
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        gallery.innerHTML = ''; 
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'gallery-item';
+        gallery.appendChild(img);
+      }
+      reader.readAsDataURL(file);
+
+      // เตรียมข้อมูลส่งไป backend
+      const formData = new FormData();
+      formData.append('image', file);
+
+      loading.style.display = 'block';
+      resultBox.style.display = 'none';
+      resultBox.innerHTML = '';
+
+      try {
+        const response = await fetch('http://localhost:3000/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        loading.style.display = 'none';
+
+        if (data.error) {
+          resultBox.innerHTML = `<p style="color:red;">❌ ${data.error}</p>`;
+          resultBox.style.display = 'block';
+          return;
+        }
+
+        // ดึงข้อมูลจากผลลัพธ์
+        const { emotion, confidence, all } = data.prediction || data;
+
+        let html = `<h3>ผลลัพธ์หลัก: ${emotion} (${(confidence * 100).toFixed(1)}%)</h3>`;
+        html += `<div><strong>คะแนนทั้งหมด:</strong></div>`;
+
+        all.forEach(item => {
+          const percent = (item.score * 100).toFixed(1);
+          html += `
+            <div style="margin-top:8px;">
+              ${item.label} — ${percent}%
+              <div class="bar"><div class="bar-fill" style="width:${percent}%;"></div></div>
+            </div>
+          `;
+        });
+
+        resultBox.innerHTML = html;
+        resultBox.style.display = 'block';
+      } catch (err) {
+        loading.style.display = 'none';
+        resultBox.innerHTML = `<p style="color:red;">❌ เกิดข้อผิดพลาด: ${err.message}</p>`;
+        resultBox.style.display = 'block';
+      }
+    });
+  </script>
+
+</body>
+</html>

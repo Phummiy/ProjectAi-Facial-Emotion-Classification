@@ -1,0 +1,134 @@
+/* พื้นหลัง gradient */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #a8c8e0, #ffffff);
+  padding-top: 40px;
+}
+
+/* หัวข้อ */
+h1 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+  text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+}
+
+/* ปุ่มอัปโหลด */
+.upload-wrapper {
+  margin-bottom: 30px;
+}
+
+#imageInput {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 2px solid #5581a6;
+  background-color: #f0f8ff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+#imageInput:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* กริดแสดงรูปภาพ */
+.gallery-wrapper {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); /* ทีละรูป */
+  gap: 15px;
+  width: 760px; /* กรอบเล็ก */
+}
+/* ทำให้ h1 ที่เป็นลิงก์ดูเหมือนหัวข้อธรรมดา */
+.gallery-link {
+  text-decoration: none;
+}
+
+.gallery-link h1 {
+  color: #333;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.gallery-link h1:hover {
+  color: #5581a6;
+  transform: scale(1.05);
+}
+
+/* รูปภาพแต่ละอัน */
+.gallery-item {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 2px solid #5581a6;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s, filter 0.3s;
+  cursor: pointer;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background-color: #ffffffcc;
+  border: none;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.result-box {
+  display: none;
+  max-width: 720px;
+  margin: 24px auto;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(245,249,252,0.95));
+  box-shadow: 0 6px 20px rgba(48, 112, 196, 0.08);
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  color: #122036;
+  border: 1px solid rgba(18,34,54,0.06);
+}
+
+/* เมื่อมีข้อมูลจะถูกเปิดโดยเพิ่ม class “active” */
+.result-box.active {
+  display: block;
+}
+
+.back-btn:hover {
+      background-color: #f1f1f1;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+    .back-btn img {
+      width: 40px;
+      height: 40px;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+  }
+
+  #imageInput {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  .gallery-wrapper {
+    width: 180px;
+  }
+}

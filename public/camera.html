@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Camera</title>
+  <link rel="stylesheet" href="css/camera.css">
+</head>
+<body>
+
+  <h1>Facial Emotion Detection</h1>
+
+  <a href="index.html" class="back-btn">
+    <img src="/assets/backarrow.png" alt="Back">
+  </a>
+  
+  <!-- ปุ่มเริ่มกล้อง -->
+  <button id="startBtn">เริ่มกล้อง</button>
+
+  <!-- แสดง stream -->
+  <div>
+    <img id="camera-stream" width="640" height="480" style="display:none;">
+  </div>
+
+  <!-- ปุ่มย้อนกลับ -->
+  <div class="icons">
+    <a href="index.html">
+      <img src="/assets/camera_off.png" alt="Back" class="icon-img">
+    </a>
+  </div>
+
+  <script>
+const loader = document.getElementById('loader');
+const img = document.getElementById('camera-stream');
+const btn = document.getElementById('startBtn');
+
+btn.addEventListener('click', () => {
+  btn.style.display = "none";
+  img.src = "http://localhost:5000/video_feed"; // stream จาก Flask
+  img.style.display = "block";
+  loader.style.display = "none";
+});
+</script>
+
+</body>
+</html>
