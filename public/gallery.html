@@ -1,47 +1,94 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8">
   <title>Gallery</title>
   <link rel="stylesheet" href="css/gallery.css">
 </head>
+
 <body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <span class="brand">CareEmotion</span>
+    </div>
+  </header>
+
+  <h1>Image Upload</h1>
 
   <a href="index.html" class="back-btn">
     <img src="/assets/backarrow.png" alt="Back">
   </a>
 
-  <!-- ครอบหัวข้อด้วยลิงก์ -->
-  <a href="index.html" class="gallery-link">
-    <h1>Gallery</h1>
-  </a>
-
   <!-- ปุ่มอัปโหลดรูปทีละรูป -->
   <div class="upload-wrapper">
+    <label for="imageInput" class="upload-label">
+      <img src="/assets/uploadicon.png" alt="Upload">
+      <span>คลิกเพื่ออัปโหลดรูปภาพ</span>
+    </label>
     <input type="file" id="imageInput" accept="image/*">
   </div>
 
   <!-- แสดง gallery -->
   <div class="gallery-wrapper" id="gallery"></div>
 
-  
-  <div id="result" class="result-box"></div>
-<div id="loading" class="loading" style="display:none;">⏳ กำลังทำนายอารมณ์...</div>
+  <div id="loading" class="loading" style="display:none;">
+    <div class="loader"></div>
+    <span>กำลังทำนายอารมณ์...</span>
+  </div>
+
+  <!-- Wrapper สำหรับผลลัพธ์และ heatmap -->
+  <div class="result-heatmap-wrapper" style="display:none;" id="resultWrapper">
+    <div id="result" class="result-box"></div>
+    <div id="heatmapBox" class="heatmap-box"></div>
+  </div>
+
+  <!-- Info-card -->
+  <div class="info-card">
+    <div class="info-section">
+      <h3>วิธีใช้งานโหมดอัปโหลดรูปภาพ (Image Upload)</h3>
+      <ol>
+        <li>เลือกหรืออัปโหลดรูปภาพ ของเด็กที่ต้องการตรวจจับอารมณ์ </li>
+        <li>รอระบบดำเนินการวิเคราะห์และแสดงผลลัพธ์ของอารมณ์ จากภาพที่อัปโหลด</li>
+      </ol>
+      <p>📊 <strong>ผลลัพธ์:</strong> สามารถใช้ประกอบการสังเกตพฤติกรรมหรืออารมณ์ของเด็กได้อย่างเข้าใจยิ่งขึ้น</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="bottom-footer">
+    by จั่งซี้มันต้องถอน
+  </div>
 
   <script>
     const imageInput = document.getElementById('imageInput');
     const gallery = document.getElementById('gallery');
     const loading = document.getElementById('loading');
     const resultBox = document.getElementById('result');
+    const heatmapBox = document.getElementById('heatmapBox');
+    const resultWrapper = document.getElementById('resultWrapper');
+    const infoCard = document.querySelector('.info-card');
+
+    function showLoader() {
+      loading.style.display = 'flex';
+    }
+
+    function hideLoader() {
+      loading.style.display = 'none';
+    }
 
     imageInput.addEventListener('change', async (event) => {
       const file = event.target.files[0];
       if (!file) return;
 
-      // แสดงภาพ preview
+      // ย่อกล่องอัปโหลดลง
+      document.querySelector('.upload-wrapper').classList.add('shrink');
+
+      // แสดง preview
       const reader = new FileReader();
-      reader.onload = function(e) {
-        gallery.innerHTML = ''; 
+      reader.onload = function (e) {
+        gallery.innerHTML = '';
         const img = document.createElement('img');
         img.src = e.target.result;
         img.className = 'gallery-item';
@@ -49,54 +96,67 @@
       }
       reader.readAsDataURL(file);
 
-      // เตรียมข้อมูลส่งไป backend
+      infoCard.classList.add('hidden'); // ซ่อนทันทีหลังเลือกภาพ
+
+      // เตรียมส่ง backend
       const formData = new FormData();
       formData.append('image', file);
 
-      loading.style.display = 'block';
-      resultBox.style.display = 'none';
+      // Show loader
+      showLoader();
+      resultWrapper.style.display = 'none';
       resultBox.innerHTML = '';
+      heatmapBox.innerHTML = '';
 
       try {
         const response = await fetch('http://localhost:3000/predict', {
           method: 'POST',
           body: formData
         });
-
         const data = await response.json();
-        loading.style.display = 'none';
+        hideLoader();
 
         if (data.error) {
           resultBox.innerHTML = `<p style="color:red;">❌ ${data.error}</p>`;
-          resultBox.style.display = 'block';
+          resultWrapper.style.display = 'block';
           return;
         }
 
-        // ดึงข้อมูลจากผลลัพธ์
-        const { emotion, confidence, all } = data.prediction || data;
+        const { emotion, confidence, all, heatmap_path } = data.prediction || data;
 
-        let html = `<h3>ผลลัพธ์หลัก: ${emotion} (${(confidence * 100).toFixed(1)}%)</h3>`;
-        html += `<div><strong>คะแนนทั้งหมด:</strong></div>`;
-
+        // ผลลัพธ์
+        let resultHtml = `<h3>ผลลัพธ์หลัก: ${emotion} (${(confidence * 100).toFixed(1)}%)</h3>`;
+        resultHtml += `<div><strong>คะแนนทั้งหมด:</strong></div>`;
         all.forEach(item => {
           const percent = (item.score * 100).toFixed(1);
-          html += `
-            <div style="margin-top:8px;">
-              ${item.label} — ${percent}%
+          resultHtml += `
+            <div class="result-item">
+              <div class="result-label">${item.label} — ${percent}%</div>
               <div class="bar"><div class="bar-fill" style="width:${percent}%;"></div></div>
             </div>
           `;
         });
+        resultBox.innerHTML = resultHtml;
 
-        resultBox.innerHTML = html;
-        resultBox.style.display = 'block';
+        // Heatmap
+        if (heatmap_path) {
+          const heatmapUrl = `http://localhost:3000/static/${heatmap_path}`;
+          heatmapBox.innerHTML = `
+            <h4>🔍 พื้นที่ที่โมเดลสังเกต:</h4>
+            <img src="${heatmapUrl}" class="heatmap-image" alt="Heatmap Result">
+          `;
+        }
+
+        // แสดง wrapper ทั้งหมด
+        resultWrapper.style.display = 'flex';
       } catch (err) {
-        loading.style.display = 'none';
+        hideLoader();
         resultBox.innerHTML = `<p style="color:red;">❌ เกิดข้อผิดพลาด: ${err.message}</p>`;
-        resultBox.style.display = 'block';
+        resultWrapper.style.display = 'flex';
       }
     });
   </script>
 
 </body>
+
 </html>

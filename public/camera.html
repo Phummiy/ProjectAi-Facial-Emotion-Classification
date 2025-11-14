@@ -6,40 +6,87 @@
   <link rel="stylesheet" href="css/camera.css">
 </head>
 <body>
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <span class="brand">CareEmotion</span>
+    </div>
+  </header>
 
-  <h1>Facial Emotion Detection</h1>
-
+  <!-- Back button -->
   <a href="index.html" class="back-btn">
     <img src="/assets/backarrow.png" alt="Back">
   </a>
-  
-  <!-- ปุ่มเริ่มกล้อง -->
-  <button id="startBtn">เริ่มกล้อง</button>
 
-  <!-- แสดง stream -->
-  <div>
-    <img id="camera-stream" width="640" height="480" style="display:none;">
+  <h1>Real-Time Webcam</h1>
+  <!-- Start button -->
+  <button id="startBtn">Start Camera</button>
+
+  <!-- Info-card -->
+  <div class="info-card">
+    <div class="info-section">
+      <h3>คำแนะนำในการใช้งานเพิ่มเติม</h3>
+      <ul>
+        <li>ใช้น้ำเสียงและท่าทางอ่อนโยนขณะจับภาพ</li>
+        <li>ทำให้เด็กสบายใจ ไม่กังวลกับกล้อง</li>
+        <li>บันทึกผลอย่างสม่ำเสมอเพื่อดูแนวโน้มอารมณ์</li>
+        <li>ใช้ผลอารมณ์เป็นข้อมูลประกอบการสังเกต ไม่ใช่การตัดสินเพียงอย่างเดียว</li>
+      </ul>
+    </div>
+    <div class="info-section">
+      <h3>วิธีใช้งานโหมดกล้องแบบเรียลไทม์ (Real-Time Webcam)</h3>
+      <ol>
+        <li>เปิดกล้อง ผ่านปุ่ม "Start Camera" </li>
+        <li>อนุญาตสิทธิ์การเข้าถึงกล้อง</li>
+        <li>ระบบจะวิเคราะห์อารมณ์แบบเรียลไทม์ จากใบหน้าที่กล้องจับ</li>
+      </ol>
+      <p>💡 <strong>เคล็ดลับ:</strong> ให้เด็กอยู่ในสภาพแสงที่เหมาะสมและรู้สึกผ่อนคลายขณะใช้งาน</p>
+    </div>
   </div>
 
-  <!-- ปุ่มย้อนกลับ -->
-  <div class="icons">
-    <a href="index.html">
-      <img src="/assets/camera_off.png" alt="Back" class="icon-img">
-    </a>
+  <!-- Video + Loader -->
+  <div class="video-wrapper">
+    <img id="camera-stream" />
+    <div class="loader-container" id="loader">
+      <div class="loader"></div>
+      <span>กำลังโหลดกล้อง...</span>
+    </div>
+  </div>
+
+  <div class="icons"> <a href="camera.html"> <img src="/assets/camera_off.png" alt="Back" class="icon-img"> </a> </div>
+
+  <!-- Footer -->
+  <div class="bottom-footer">
+    by จั่งซี้มันต้องถอน
   </div>
 
   <script>
-const loader = document.getElementById('loader');
-const img = document.getElementById('camera-stream');
-const btn = document.getElementById('startBtn');
+    const loader = document.getElementById('loader');
+    const img = document.getElementById('camera-stream');
+    const btn = document.getElementById('startBtn');
+    const iconsDiv = document.querySelector('.icons'); 
+    const iconImg = document.querySelector('.icon-img');
+    const infoCard = document.querySelector('.info-card');
 
-btn.addEventListener('click', () => {
-  btn.style.display = "none";
-  img.src = "http://localhost:5000/video_feed"; // stream จาก Flask
-  img.style.display = "block";
-  loader.style.display = "none";
-});
-</script>
+    btn.addEventListener('click', () => {
+      //ซ่อน info-card
+      infoCard.classList.add('hidden');
 
+      //ซ่อนปุ่ม Start Camera
+      btn.style.display = "none";
+
+      //แสดง loader
+      loader.classList.add('active');
+      iconsDiv.style.display = 'block'; 
+      iconImg.style.display = 'block';
+
+      // โหลด stream จาก Flask
+      img.onload = () => {
+        loader.classList.remove('active'); // ซ่อน loader
+        img.classList.add('active');       // แสดง image
+      };
+      img.src = "http://localhost:5000/video_feed"; // ปรับตาม backend
+    });
+  </script>
 </body>
 </html>

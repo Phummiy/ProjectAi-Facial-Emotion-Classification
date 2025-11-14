@@ -3,7 +3,8 @@ html,
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #a8c8e0;
+    background: linear-gradient(135deg, #cbe4ff, #f0f8ff);
+    background-size: 400% 400%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -46,6 +47,49 @@ html,
     font-size: clamp(32px, 8vw, 60px);
   }
 
+   /* 🎨 ปุ่ม Start */
+    .start-btn {
+      margin-top: 40px;
+      padding: 0.8em 2.5em;
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: bold;
+      color: #000000;
+      border: none;
+      border-radius: 50px;
+      background: rgb(255, 255, 255);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* เอฟเฟกต์แสงตอน hover */
+    .start-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0.4),
+        rgba(255, 255, 255, 0)
+      );
+      transform: skewX(-25deg);
+      transition: all 0.5s ease;
+    }
+
+    .start-btn:hover::before {
+      left: 125%;
+    }
+
+    .start-btn:hover {
+      transform: scale(1.07);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+
   @keyframes slideMask {
     0% { transform: translateX(100%); }
     50% { transform: translateX(0%); }
@@ -57,24 +101,36 @@ html,
     margin-top: 0.8em;
   }
 
-  .icons {
-    margin-top: 3vh;
-    display: flex;
-    gap: clamp(20px, 6vw, 50px);
-    justify-content: center;
-    align-items: center;
-  }
+.bubbles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
 
-  .icon-img {
-    width: clamp(40px, 10vw, 60px);
-    height: clamp(40px, 10vw, 60px);
-    cursor: pointer;
-    transition: transform 0.2s;
-  }
+.bubble {
+  position: absolute;
+  bottom: -50px;
+  border-radius: 50%;
+  background-color: rgba(255,255,255,0.8);
+  animation: floatUp linear infinite; 
+}
+.bubble:nth-child(1) { background-color: rgba(255,223,0,0.8); }   /* happy */
+.bubble:nth-child(2) { background-color: rgba(100,149,237,0.8); } /* neutral */
+.bubble:nth-child(3) { background-color: rgba(138,43,226,0.8); }  /* sad */
 
-  .icon-img:hover {
-    transform: scale(1.2);
-  }
+/* Animation ฟองลอยขึ้น */
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  50% { transform: translateY(-100px) scale(1.2); opacity: 0.9; }
+  100% { transform: translateY(-300px) scale(0.8); opacity: 0; }
+}
+
+
 
   .bottom-footer {
     position: fixed;
