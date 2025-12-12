@@ -270,3 +270,74 @@
 .icon-img:hover {
   transform: scale(1.2);
 }
+/* ปุ่ม Record */
+#recordBtn {
+  font-family: 'Prompt', sans-serif;
+  padding: 14px 28px;
+  font-size: 20px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-bottom: 10px;
+
+  background: linear-gradient(135deg, #6bc5d2, #6bc5d2);
+  color: white;
+
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.25s ease;
+  display: inline-block;
+}
+
+/* Hover: นุ่ม+เด้งขึ้นเล็กน้อย */
+#recordBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 8px 18px rgba(0,0,0,0.2);
+  opacity: 0.95;
+}
+
+/* Active: กดลง */
+#recordBtn:active {
+  transform: translateY(2px);
+  box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ปุ่มตอน Stop (แดงแบบนุ่ม ไม่แรงเกินไป) */
+#recordBtn.recording {
+  background: linear-gradient(135deg, #ff7b7b, #ff5252);
+  box-shadow: 0px 6px 16px rgba(255, 41, 41, 0.3);
+}
+
+#recordTimer {
+  font-size: 18px;
+  margin-left: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Popup แจ้งเตือนตอนบันทึกสำเร็จ */
+.save-popup {
+  position: fixed;
+  top: 120px;
+  right: 20px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-left: 6px solid #64d488; /* เขียวพาสเทล */
+  border-radius: 10px;
+  font-size: 18px;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 9999;
+}
+
+.save-popup.show {
+  opacity: 1;
+  transform: translateY(0);
+}

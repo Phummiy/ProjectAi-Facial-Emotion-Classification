@@ -162,9 +162,6 @@ body {
   line-height: 1.8;
 }
 
-.emotion-card li::before {
-  content: "💡 ";
-}
     /* Back button */
     .back-btn {
       position: fixed;

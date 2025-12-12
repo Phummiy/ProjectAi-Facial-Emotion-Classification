@@ -14,7 +14,7 @@
   </header>
 
   <!-- Back button -->
-  <a href="index.html" class="back-btn">
+  <a href="home.html" class="back-btn">
     <img src="/assets/backarrow.png" alt="Back">
   </a>
 
@@ -28,9 +28,10 @@
       <h3>คำแนะนำในการใช้งานเพิ่มเติม</h3>
       <ul>
         <li>ใช้น้ำเสียงและท่าทางอ่อนโยนขณะจับภาพ</li>
-        <li>ทำให้เด็กสบายใจ ไม่กังวลกับกล้อง</li>
+        <li>ถอดอุปกรณ์ที่ปิดบังใบหน้า เช่น แว่นตา เพื่อผลลัพธ์ที่แม่นยำมากขึั้น </li>
         <li>บันทึกผลอย่างสม่ำเสมอเพื่อดูแนวโน้มอารมณ์</li>
-        <li>ใช้ผลอารมณ์เป็นข้อมูลประกอบการสังเกต ไม่ใช่การตัดสินเพียงอย่างเดียว</li>
+        <li>หลีกเลี่ยงการตัดสินใจจากผลลัพธ์เพียงครั้งเดียว</li>
+        <li>ใช้ผลอารมณ์เป็นข้อมูลประกอบการสังเกต</li>
       </ul>
     </div>
     <div class="info-section">
@@ -39,10 +40,15 @@
         <li>เปิดกล้อง ผ่านปุ่ม "Start Camera" </li>
         <li>อนุญาตสิทธิ์การเข้าถึงกล้อง</li>
         <li>ระบบจะวิเคราะห์อารมณ์แบบเรียลไทม์ จากใบหน้าที่กล้องจับ</li>
+        <li>หากต้องการบันทึกวิดีโอ ให้กดปุ่ม "Start Record" เพื่อเริ่มบันทึก และกดอีกครั้งเพื่อหยุด</li>
+        <li>ระบบจะแสดงข้อความ "Save complete" เพื่อยืนยันการบันทึก</li>
       </ol>
       <p>💡 <strong>เคล็ดลับ:</strong> ให้เด็กอยู่ในสภาพแสงที่เหมาะสมและรู้สึกผ่อนคลายขณะใช้งาน</p>
     </div>
   </div>
+
+  <button id="recordBtn" class="hidden">Start Record</button>
+  <span id="recordTimer" class="hidden">00:00</span>
 
   <!-- Video + Loader -->
   <div class="video-wrapper">
@@ -54,6 +60,9 @@
   </div>
 
   <div class="icons"> <a href="camera.html"> <img src="/assets/camera_off.png" alt="Back" class="icon-img"> </a> </div>
+  <div id="saveMessage" class="save-popup hidden">Save complete</div>
+
+
 
   <!-- Footer -->
   <div class="bottom-footer">
@@ -61,32 +70,91 @@
   </div>
 
   <script>
-    const loader = document.getElementById('loader');
-    const img = document.getElementById('camera-stream');
-    const btn = document.getElementById('startBtn');
-    const iconsDiv = document.querySelector('.icons'); 
-    const iconImg = document.querySelector('.icon-img');
-    const infoCard = document.querySelector('.info-card');
+  const loader = document.getElementById('loader');
+  const img = document.getElementById('camera-stream');
+  const btn = document.getElementById('startBtn');
+  const recordBtn = document.getElementById('recordBtn');
+  const iconsDiv = document.querySelector('.icons'); 
+  const iconImg = document.querySelector('.icon-img');
+  const infoCard = document.querySelector('.info-card');
+  let timerInterval = null;
+  let seconds = 0;
+  const recordTimer = document.getElementById('recordTimer');
 
-    btn.addEventListener('click', () => {
-      //ซ่อน info-card
-      infoCard.classList.add('hidden');
+  let isRecording = false;
 
-      //ซ่อนปุ่ม Start Camera
-      btn.style.display = "none";
+  function formatTime(sec) {
+  const m = String(Math.floor(sec / 60)).padStart(2, '0');
+  const s = String(sec % 60).padStart(2, '0');
+  return `${m}:${s}`;
+  }
 
-      //แสดง loader
-      loader.classList.add('active');
-      iconsDiv.style.display = 'block'; 
-      iconImg.style.display = 'block';
 
-      // โหลด stream จาก Flask
-      img.onload = () => {
-        loader.classList.remove('active'); // ซ่อน loader
-        img.classList.add('active');       // แสดง image
-      };
-      img.src = "http://localhost:5000/video_feed"; // ปรับตาม backend
-    });
-  </script>
+  btn.addEventListener('click', () => {
+    infoCard.classList.add('hidden');
+    btn.style.display = "none";
+
+    loader.classList.add('active');
+    iconsDiv.style.display = 'block'; 
+    iconImg.style.display = 'block';
+
+    img.onload = () => {
+      loader.classList.remove('active');
+      img.classList.add('active');
+
+      // ✔ แสดงปุ่มอัดวิดีโอเมื่อกล้องพร้อมแล้ว
+      recordBtn.classList.remove('hidden');
+    };
+
+    img.src = "http://localhost:5000/video_feed";
+  });
+
+  // ---------------- RECORD BUTTON ------------------
+  recordBtn.addEventListener('click', () => {
+  if (!isRecording) {
+    // Start recording
+    fetch("http://localhost:5000/start_record", { method: "POST" });
+    recordBtn.textContent = "Stop Record";
+    recordBtn.style.background = "#d9534f"; // แดง
+
+    // ⏱ เริ่มจับเวลา
+    seconds = 0;
+    recordTimer.textContent = "00:00";
+    recordTimer.classList.remove('hidden');
+
+    timerInterval = setInterval(() => {
+      seconds++;
+      recordTimer.textContent = formatTime(seconds);
+    }, 1000);
+
+  } else {
+    // Stop recording
+    fetch("http://localhost:5000/stop_record", { method: "POST" });
+    recordBtn.textContent = "Start Record";
+    recordBtn.style.background = "#6bc5d2"; // เขียว
+
+    // ⏱ หยุดจับเวลา
+    clearInterval(timerInterval);
+    recordTimer.classList.add('hidden');  // ซ่อนเวลาเมื่อหยุด
+    
+    // ------------------------
+    // ⭐ แสดงข้อความ "บันทึกสำเร็จ"
+    // ------------------------
+    const saveMsg = document.getElementById('saveMessage');
+    saveMsg.classList.remove('hidden');
+    saveMsg.classList.add('show');
+
+    // ซ่อนอัตโนมัติหลัง 2 วินาที
+    setTimeout(() => {
+    saveMsg.classList.remove('show');
+    setTimeout(() => saveMsg.classList.add('hidden'), 300);
+    }, 2000);
+
+  }
+
+  isRecording = !isRecording;
+});
+
+</script>
 </body>
 </html>

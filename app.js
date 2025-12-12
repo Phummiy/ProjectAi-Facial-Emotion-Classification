@@ -70,23 +70,64 @@ app.post('/predict', upload.single('image'), (req, res) => {
   pythonProcess.stdout.on('data', data => dataString += data.toString());
   pythonProcess.stderr.on('data', err => console.error('Python Error:', err.toString()));
 
-  pythonProcess.on('close', code => {
-    try {
-      const result = JSON.parse(dataString);
-      // ลบไฟล์อัปโหลดหลังประมวลผล
-      fs.unlinkSync(imagePath);
-      // ลบ heatmap เก่าที่เกิน 15 นาที
-      cleanOldHeatmaps();
+pythonProcess.on('close', code => {
+  try {
+    const result = JSON.parse(dataString);
 
-      console.log('ผลลัพธ์จากโมเดล:');
-      console.log(JSON.stringify(result, null, 2));
+    // ลบรูปต้นฉบับหลังประมวลผล
+    fs.unlinkSync(imagePath);
 
-      res.json(result);
-    } catch (err) {
-      console.error('Parse Error:', err);
-      res.status(500).json({ error: 'Failed to parse prediction result.' });
+    // ลบ heatmap เก่า
+    cleanOldHeatmaps();
+
+    // -------------------------
+    // บันทึก prediction ลงไฟล์เดียว
+    // -------------------------
+    const SAVE_DIR = path.join(__dirname, 'saved_predictions');
+    if (!fs.existsSync(SAVE_DIR)) {
+      fs.mkdirSync(SAVE_DIR, { recursive: true });
     }
-  });
+
+    const jsonPath = path.join(SAVE_DIR, 'predictions.json');
+
+    // อ่านไฟล์เดิม (ถ้ามี)
+    let oldData = [];
+    if (fs.existsSync(jsonPath)) {
+      try {
+        oldData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+      } catch (err) {
+        console.error("⚠ อ่าน predictions.json ไม่ได้, จะสร้างใหม่");
+      }
+    }
+
+    // สร้าง object ใหม่ที่จะบันทึก
+    const newEntry = {
+      timestamp: new Date().toISOString(),
+      image_name: req.file.originalname,
+      result
+    };
+
+    // append
+    oldData.push(newEntry);
+
+    // เขียนกลับลงไฟล์
+    fs.writeFileSync(jsonPath, JSON.stringify(oldData, null, 2));
+
+    console.log("✔ Updated predictions.json");
+
+    // ส่งกลับไปพร้อมชื่อไฟล์
+    res.json({
+      ...result,
+      saved_file: "predictions.json"
+    });
+
+  } catch (err) {
+    console.error('Parse Error:', err);
+    res.status(500).json({ error: 'Failed to parse prediction result.' });
+  }
+});
+
+
 });
 
 // เริ่ม server

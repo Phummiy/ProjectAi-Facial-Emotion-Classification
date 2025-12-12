@@ -1,0 +1,224 @@
+[
+  {
+    "timestamp": "2025-12-10T11:05:24.950Z",
+    "image_name": "images (10).jpg",
+    "result": {
+      "prediction": {
+        "emotion": "disgust",
+        "confidence": 0.4600789248943329,
+        "all": [
+          {
+            "label": "happiness",
+            "score": 0.10311717540025711
+          },
+          {
+            "label": "surprise",
+            "score": 0.13402538001537323
+          },
+          {
+            "label": "sadness",
+            "score": 0.08499070256948471
+          },
+          {
+            "label": "anger",
+            "score": 0.09128107875585556
+          },
+          {
+            "label": "disgust",
+            "score": 0.4600789248943329
+          },
+          {
+            "label": "fear",
+            "score": 0.12650667130947113
+          }
+        ],
+        "heatmap_path": "heatmaps/heatmap_img_1765364718534.jpg"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-12-10T11:05:39.374Z",
+    "image_name": "images (11).jpg",
+    "result": {
+      "prediction": {
+        "emotion": "anger",
+        "confidence": 0.9712023735046387,
+        "all": [
+          {
+            "label": "happiness",
+            "score": 3.406641724268411e-8
+          },
+          {
+            "label": "surprise",
+            "score": 1.0545592177280128e-9
+          },
+          {
+            "label": "sadness",
+            "score": 0.0000022088158857513918
+          },
+          {
+            "label": "anger",
+            "score": 0.9712023735046387
+          },
+          {
+            "label": "disgust",
+            "score": 0.028795456513762474
+          },
+          {
+            "label": "fear",
+            "score": 8.08748712444185e-9
+          }
+        ],
+        "heatmap_path": "heatmaps/heatmap_img_1765364734166.jpg"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-12-10T11:05:44.796Z",
+    "image_name": "images (7).jpg",
+    "result": {
+      "prediction": {
+        "emotion": "disgust",
+        "confidence": 0.8318960070610046,
+        "all": [
+          {
+            "label": "happiness",
+            "score": 0.013294159434735775
+          },
+          {
+            "label": "surprise",
+            "score": 0.006994078401476145
+          },
+          {
+            "label": "sadness",
+            "score": 0.14478760957717896
+          },
+          {
+            "label": "anger",
+            "score": 0.001870283973403275
+          },
+          {
+            "label": "disgust",
+            "score": 0.8318960070610046
+          },
+          {
+            "label": "fear",
+            "score": 0.0011579067213460803
+          }
+        ],
+        "heatmap_path": "heatmaps/heatmap_img_1765364739917.jpg"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-12-10T11:05:52.381Z",
+    "image_name": "images (8).jpg",
+    "result": {
+      "prediction": {
+        "emotion": "anger",
+        "confidence": 0.6288271546363831,
+        "all": [
+          {
+            "label": "happiness",
+            "score": 0.00013391661923378706
+          },
+          {
+            "label": "surprise",
+            "score": 0.09166491776704788
+          },
+          {
+            "label": "sadness",
+            "score": 0.12524095177650452
+          },
+          {
+            "label": "anger",
+            "score": 0.6288271546363831
+          },
+          {
+            "label": "disgust",
+            "score": 0.0038356012664735317
+          },
+          {
+            "label": "fear",
+            "score": 0.15029741823673248
+          }
+        ],
+        "heatmap_path": "heatmaps/heatmap_img_1765364747305.jpg"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-12-10T11:05:57.929Z",
+    "image_name": "images (19).jpg",
+    "result": {
+      "prediction": {
+        "emotion": "fear",
+        "confidence": 0.9385046362876892,
+        "all": [
+          {
+            "label": "happiness",
+            "score": 0.0001845014630816877
+          },
+          {
+            "label": "surprise",
+            "score": 0.05965566262602806
+          },
+          {
+            "label": "sadness",
+            "score": 0.0013027292443439364
+          },
+          {
+            "label": "anger",
+            "score": 0.0003430771466810256
+          },
+          {
+            "label": "disgust",
+            "score": 0.00000934690069698263
+          },
+          {
+            "label": "fear",
+            "score": 0.9385046362876892
+          }
+        ],
+        "heatmap_path": "heatmaps/heatmap_img_1765364752971.jpg"
+      }
+    }
+  },
+  {
+    "timestamp": "2025-12-12T10:28:31.846Z",
+    "image_name": "images (15).jpg",
+    "result": {
+      "prediction": {
+        "emotion": "sadness",
+        "confidence": 0.9910584092140198,
+        "all": [
+          {
+            "label": "happiness",
+            "score": 0.0004692090442404151
+          },
+          {
+            "label": "surprise",
+            "score": 0.0015731530729681253
+          },
+          {
+            "label": "sadness",
+            "score": 0.9910584092140198
+          },
+          {
+            "label": "anger",
+            "score": 0.0019463981734588742
+          },
+          {
+            "label": "disgust",
+            "score": 0.0003314996138215065
+          },
+          {
+            "label": "fear",
+            "score": 0.004621349275112152
+          }
+        ],
+        "heatmap_path": "heatmaps/heatmap_img_1765535308782.jpg"
+      }
+    }
+  }
+]
