@@ -33,7 +33,3 @@ Camera Grad - Cam
 ```
 python Gradcam.py
 ```
-Camera general
-```
-python predict.py
-```
