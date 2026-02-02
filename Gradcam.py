@@ -268,7 +268,7 @@ def generate_frames():
         if metadata_fp:
             metadata_fp.close()
             metadata_fp = None
-
+#--finish--
 # ---------- Flask endpoints ----------
 @app.route('/video_feed')
 def video_feed():
